@@ -23,8 +23,8 @@
       <CheckBox fx:id="fridayCheck" layoutX="588.0" layoutY="343.0" mnemonicParsing="false" text="Fri" />
       <CheckBox fx:id="saturdayCheck" layoutX="700.0" layoutY="343.0" mnemonicParsing="false" text="Sat" />
       <Label layoutX="467.0" layoutY="434.0" text="Description" />
-      <TextField fx:id="decriptionField" layoutX="467.0" layoutY="477.0" prefHeight="104.0" prefWidth="340.0" promptText="Insert Description Here" />
       <Button fx:id="addButton" layoutX="469.0" layoutY="592.0" mnemonicParsing="false" onAction="#addButton" text="Add" />
       <Button fx:id="clearButton" layoutX="713.0" layoutY="592.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
+      <TextArea fx:id="descriptionField" layoutX="470.0" layoutY="476.0" prefHeight="110.0" prefWidth="325.0" promptText="Insert Description Here" />
    </children>
 </AnchorPane>
