@@ -7,8 +7,8 @@
 
 <AnchorPane prefHeight="657.0" prefWidth="826.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MyController">
    <children>
-      <Button fx:id="myButton" layoutX="98.0" layoutY="261.0" mnemonicParsing="false" onAction="#buttonTest" text="Button Test" />
-      <TextField fx:id="textFieldTest" layoutX="44.0" layoutY="131.0" />
+      <Button fx:id="myButton" layoutX="77.0" layoutY="243.0" mnemonicParsing="false" onAction="#buttonTest" text="Button Test" visible="false" />
+      <TextField fx:id="textFieldTest" layoutX="44.0" layoutY="131.0" visible="false" />
       <Label layoutX="475.0" layoutY="41.0" text="Name" />
       <TextField fx:id="nameField" layoutX="475.0" layoutY="91.0" promptText="Insert Name Here" />
       <Label layoutX="475.0" layoutY="165.0" text="Time" />
@@ -26,5 +26,6 @@
       <Button fx:id="addButton" layoutX="469.0" layoutY="592.0" mnemonicParsing="false" onAction="#addButton" text="Add" />
       <Button fx:id="clearButton" layoutX="713.0" layoutY="592.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <TextArea fx:id="descriptionField" layoutX="470.0" layoutY="476.0" prefHeight="110.0" prefWidth="325.0" promptText="Insert Description Here" />
+      <Label fx:id="upcomingMedsLabel" layoutX="34.0" layoutY="34.0" prefHeight="604.0" prefWidth="384.0" wrapText="true" />
    </children>
 </AnchorPane>
