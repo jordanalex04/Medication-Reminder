@@ -17,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 
 public class MyController implements Initializable {
 
@@ -31,9 +32,11 @@ public class MyController implements Initializable {
 	@FXML private ChoiceBox hourDropDown;
 	@FXML private ChoiceBox minuteDropDown;
 	@FXML private ChoiceBox morningAfternoonDropDown;
+	@FXML private Label upcomingMedsLabel;
 	@FXML private TextArea descriptionField;
 	@FXML private TextField textFieldTest;
 	@FXML private TextField nameField;
+	
 	
 	protected static ArrayList<Medication> medList;
 	
@@ -137,6 +140,8 @@ public class MyController implements Initializable {
            }
            String tempFullDay = daysOfWeek + "-" + hourDropDown.getValue() + ":" + minuteDropDown.getValue();
            medList.add(new Medication(nameField.getText(), tempFullDay, descriptionField.getText()));
+           
+           upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n" + medList.get(medList.size()-1).toString());
            
            //how to get if a check box is checked
            System.out.println(fridayCheck.isSelected());

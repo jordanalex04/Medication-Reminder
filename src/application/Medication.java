@@ -43,7 +43,7 @@ public class Medication {
        }
              
        public String toString() {
-              return "Medication Name: " + "." + medName + " Medication Time and Date: " + "." + medDateTime + " Medication Information: " + medInfo + ".";
+              return "Medication Name: " + medName + "\nMedication Time and Date: " + medDateTime + "\nMedication Information: " + medInfo;
        }
 
 }
