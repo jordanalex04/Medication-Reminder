@@ -3,6 +3,8 @@ package application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+//Test to make sure all works
+
 public class Reminder{
 	void appear(String medName, String medInfo) {
 		Alert alert = new Alert(AlertType.INFORMATION);
