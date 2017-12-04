@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-//GITHUB TEST PLEASE WORK
-
 public class Medication {
        private String medName; //name of medication
        private String medDateTime; // day of the week and at times of which

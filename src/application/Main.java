@@ -17,17 +17,8 @@ public class Main extends Application {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/application/Scene.fxml"));
 			
-			int[] hours = new int[12];
-			for(int i = 0; i < hours.length; i++) {
-				hours[i] = i+1;
-			}
-			
-			ObservableList<int[]> languages //
-            = FXCollections.observableArrayList(hours);
-			ChoiceBox<int[]> choiceBox = new ChoiceBox<int[]>(languages);
-			
 			//Read file fxml and draw interface
-			primaryStage.setTitle("Test");
+			primaryStage.setTitle("Medicaton Reminder");
 			primaryStage.setScene(new Scene(root));
 			primaryStage.show();
 		} catch(Exception e) {
