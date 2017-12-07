@@ -28,15 +28,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 
 import javax.swing.Timer;
 
 public class MyController implements Initializable {
 
-	@FXML private Button myButton;
 	@FXML private CheckBox mondayCheck;
 	@FXML private CheckBox tuesdayCheck;
 	@FXML private CheckBox wednesdayCheck;
@@ -44,28 +45,41 @@ public class MyController implements Initializable {
 	@FXML private CheckBox fridayCheck;
 	@FXML private CheckBox saturdayCheck;
 	@FXML private CheckBox sundayCheck;
-	@FXML private ChoiceBox hourDropDown;
-	@FXML private ChoiceBox minuteDropDown;
-	@FXML private ChoiceBox morningAfternoonDropDown;
+	@FXML private ChoiceBox<Object> hourDropDown;
+	@FXML private ChoiceBox<Object> minuteDropDown;
+	@FXML private ChoiceBox<String> morningAfternoonDropDown;
+	@FXML private Label timeLabel;
 	@FXML private Label upcomingMedsLabel;
 	@FXML private TextArea descriptionField;
-	@FXML private TextField textFieldTest;
 	@FXML private TextField nameField;
-	@FXML private Label timeLabel;
+	@FXML private MenuBar menuBar;
+
 
 	protected ArrayList<Medication> medList;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		medList = new ArrayList<Medication>(1);		//Creates the medList array list
+		makeDropDowns();							// Creates all the drop down boxes
+		setTime();									// Sets the time, also runs continuously
+		load();										// Loads into the program all the medications found in medication.txt
+		
+		// Make the morningAfternoonDropDown box
+		ObservableList<String> amOrPm = FXCollections.observableArrayList("AM", "PM");
+		morningAfternoonDropDown.setItems(amOrPm);
+	}
+	
+	public void makeDropDowns() {
 		// Make the hourDropDown box
 		String[] hoursArray = new String[24];
 		ObservableList<Object> hours = FXCollections.observableArrayList();
-		hours.add("");
 		for (int i = 0; i < hoursArray.length; i++) {
 			hoursArray[i] = i + "";
-			if(i<10) {
+			
+			//Formats the hours to always have two digits
+			if (i < 10)
 				hoursArray[i] = "0" + i;
-			}
+			
 			hours.add(hoursArray[i]);
 		}
 		hourDropDown.setItems(hours);
@@ -75,21 +89,23 @@ public class MyController implements Initializable {
 		ObservableList<Object> minutes = FXCollections.observableArrayList();
 		for (int i = 0; i < minutesArray.length; i++) {
 			minutesArray[i] = i * 5 + "";
-			if((i*5)<10) {
+			
+			//Formats the minutes to always have two digits
+			if ((i * 5) < 10)
 				minutesArray[i] = "0" + minutesArray[i];
-			}
+			
 			minutes.add(minutesArray[i]);
 		}
 		minuteDropDown.setItems(minutes);
-
-		// Make the morningAfternoonDropDown box
-		ObservableList<String> amOrPm = FXCollections.observableArrayList("AM", "PM");
-		morningAfternoonDropDown.setItems(amOrPm);
-
-		medList = new ArrayList<Medication>(1);
-
+	}
+	
+	public void setTime() {
+		//Set the format
 		DateFormat timeFormat = new SimpleDateFormat("EEEE HH:mm:ss");
+		
+		//Use timeline to continously loop, once a second, and update the label and check against all meds
 		final Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
+			//Get the date and set the label accordingly
 			Date dt = new Date();
 			String time = timeFormat.format(dt);
 			timeLabel.setText(time);
@@ -101,7 +117,6 @@ public class MyController implements Initializable {
 				if(temp.getMedDateTime().contains(dayOfWeek)) {
 					if(temp.getMedDateTime().contains(time.substring(time.indexOf(" "), time.length()).trim())) {
 						//When the time hits the correct day and time
-						System.out.println("YAY");
 						Reminder remind = new Reminder();
 						remind.appear(temp.getMedName(), temp.getMedInfo());
 					}
@@ -111,90 +126,47 @@ public class MyController implements Initializable {
 		}));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
-		
-		//load the medications in from the txt file
-		load();
-	}
-	
-
-	// When user click on myButton
-	// this method will be called.
-	public void buttonTest(ActionEvent event) {
-		System.out.println("Button Clicked!");
-
-		Date now = new Date();
-
-		DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS");
-
-		// Model Data
-		String dateTimeString = df.format(now);
-
-		// Show in VIEW
-		textFieldTest.setText(dateTimeString);
-
 	}
 
 	// When the user clicks on addButton this method will be called
 	public void addButton(ActionEvent event) {
-		System.out.println("ADD");
 		String daysOfWeek = "";
 		if (sundayCheck.isSelected()) {
-			if (daysOfWeek.equals("")) {
-				daysOfWeek += "Sunday";
-			} else {
-				daysOfWeek += ", Sunday";
-			}
+			if (daysOfWeek.equals("")) daysOfWeek += "Sunday";
+			else daysOfWeek += ", Sunday";
 		}
 		if (mondayCheck.isSelected()) {
-			if (daysOfWeek.equals("")) {
-				daysOfWeek += "Monday";
-			} else {
-				daysOfWeek += ", Monday";
-			}
+			if (daysOfWeek.equals("")) daysOfWeek += "Monday";
+			else daysOfWeek += ", Monday";
 		}
 		if (tuesdayCheck.isSelected()) {
-			if (daysOfWeek.equals("")) {
-				daysOfWeek += "Tuesday";
-			} else {
-				daysOfWeek += ", Tuesday";
-			}
+			if (daysOfWeek.equals("")) daysOfWeek += "Tuesday";
+			else daysOfWeek += ", Tuesday";
 		}
 		if (wednesdayCheck.isSelected()) {
-			if (daysOfWeek.equals("")) {
-				daysOfWeek += "Wednesday";
-			} else {
-				daysOfWeek += ", Wednesday";
-			}
+			if (daysOfWeek.equals("")) daysOfWeek += "Wednesday";
+			else daysOfWeek += ", Wednesday";
 		}
 		if (thursdayCheck.isSelected()) {
-			if (daysOfWeek.equals("")) {
-				daysOfWeek += "Thursday";
-			} else {
-				daysOfWeek += ", Thursday";
-			}
+			if (daysOfWeek.equals("")) daysOfWeek += "Thursday";
+			else daysOfWeek += ", Thursday";
 		}
 		if (fridayCheck.isSelected()) {
-			if (daysOfWeek.equals("")) {
-				daysOfWeek += "Friday";
-			} else {
-				daysOfWeek += ", Friday";
-			}
+			if (daysOfWeek.equals("")) daysOfWeek += "Friday";
+			else daysOfWeek += ", Friday";
 		}
 		if (saturdayCheck.isSelected()) {
-			if (daysOfWeek.equals("")) {
-				daysOfWeek += "Saturday";
-			} else {
-				daysOfWeek += ", Saturday";
-			}
+			if (daysOfWeek.equals("")) daysOfWeek += "Saturday";
+			else daysOfWeek += ", Saturday";
 		}
+		
+		// Make the proper string for the medication and then add it to the medList
 		String tempFullDay = daysOfWeek + " - " + hourDropDown.getValue() + ":" + minuteDropDown.getValue() + ":00";
 		medList.add(new Medication(nameField.getText(), tempFullDay, descriptionField.getText()));
 		upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n" + medList.get(medList.size() - 1).toString());
 
 		//calls the save method to save the new medication to the txt file
 		save(tempFullDay);
-		// how to get if a check box is checked
-		System.out.println(fridayCheck.isSelected());
 	}
 	
 	public void save(String tempFullDay) {
@@ -232,6 +204,7 @@ public class MyController implements Initializable {
 	
 	public void load() {
 		try {
+			upcomingMedsLabel.setText("");
 			//Counts how many lines there are in the file
 			int lines = 0;
 			Scanner inputStream = new Scanner(new FileInputStream("medications.txt"));
@@ -260,9 +233,14 @@ public class MyController implements Initializable {
 
 	// When the user clicks on clearButton this method will be called
 	public void clearButton(ActionEvent event) {
+		//Sets the fields to blank
 		nameField.setText("");
 		descriptionField.setText("");
+		
+		//Clears the selected values on the drop downs
+		makeDropDowns();
 
+		//Removes all checks in the check boxes
 		mondayCheck.setSelected(false);
 		tuesdayCheck.setSelected(false);
 		wednesdayCheck.setSelected(false);
@@ -270,6 +248,25 @@ public class MyController implements Initializable {
 		fridayCheck.setSelected(false);
 		saturdayCheck.setSelected(false);
 		sundayCheck.setSelected(false);
+	}
+	
+	public void viewMeds(ActionEvent event) {
+		Stage secondaryStage = new Stage();
+		
+		ViewMedications scene = new ViewMedications();
+		scene.make(medList, secondaryStage, this);
+		/*
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/application/ViewMedicationsScene.fxml"));
+			
+			//Read file fxml and draw interface
+			secondaryStage.setTitle("Medications");
+			secondaryStage.setScene(new Scene(root));
+			secondaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} */
+		
 	}
 
 }
