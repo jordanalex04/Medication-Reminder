@@ -28,6 +28,7 @@ public class EditMedication extends Application{
 	int index;
 	MyController myController;
 	
+	//All the fields within the new window
 	TextField nameField;
 	TextArea descriptionField;
 	CheckBox mondayCheck;
@@ -37,18 +38,18 @@ public class EditMedication extends Application{
 	CheckBox fridayCheck;
 	CheckBox saturdayCheck;
 	CheckBox sundayCheck;
-	
 	ChoiceBox<Object> hourDropDown;
 	ChoiceBox<Object> minuteDropDown;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		//Set up the new grid pane for the window
 		gridPane = new GridPane();
-		
 		gridPane.setPadding(new Insets(20));
 		gridPane.setHgap(10);
 		gridPane.setVgap(15);
 		
+		//Create all objects that are within the window
 		Label nameLabel = new Label("Name");
 		Label descriptionLabel = new Label("Description");
 		nameField = new TextField(med.getMedName());
@@ -61,23 +62,29 @@ public class EditMedication extends Application{
 		fridayCheck = new CheckBox("Fri");
 		saturdayCheck = new CheckBox("Sat");
 		sundayCheck = new CheckBox("Sun");
+		//Create the save button and add directions for being clicked
 		Button save = new Button("Save");
 		save.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
+				//Make a new medication based off the input from the user
 				Medication newMed = saveClicked();
-				System.out.println(newMed);
-				myController.medList.set(index, newMed);
+				//Remove the old medication and add the new one
+				myController.medList.remove(index);
+				myController.medList.add(newMed);
+				//Save the new medList and load the new save, updates the GUI label
 				save();
 				myController.load();
+				//Close this window
+				primaryStage.close();
 			}
 		});
 		hourDropDown = new ChoiceBox();
 		minuteDropDown = new ChoiceBox();
 		
+		//Make the drop down boxes
 		makeDropDowns();
 		
-		hourDropDown.setValue(med.getMedDateTime());
-		
+		//Set the check boxes according to checked or not accrodingly
 		if(med.getMedDateTime().contains("Monday"))
 			mondayCheck.setSelected(true);
 		if(med.getMedDateTime().contains("Tuesday"))
@@ -93,6 +100,7 @@ public class EditMedication extends Application{
 		if(med.getMedDateTime().contains("Sunday"))
 			sundayCheck.setSelected(true);
 		
+		//Add all the elements to the window
 		gridPane.add(nameLabel, 0, 0, 1, 1);
 		gridPane.add(nameField, 1, 0, 2, 1);
 		gridPane.add(hourDropDown, 0, 1, 1, 1);
@@ -108,12 +116,14 @@ public class EditMedication extends Application{
 		gridPane.add(descriptionField, 0, 6, 3, 5);
 		gridPane.add(save, 2, 11, 1, 1);
 		
-		Scene scene = new Scene(gridPane, 200, 340);
+		//Open the window
+		Scene scene = new Scene(gridPane, 250, 340);
 		primaryStage.setTitle("Edit");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 	
+	//Makes the window from this class while being passed in the proper parameters
 	public void make(Stage stage, Medication myMed, MyController tempController, int myIndex) {
 		this.med = myMed;
 		this.myController = tempController;
@@ -126,7 +136,9 @@ public class EditMedication extends Application{
 		}
 	}
 	
+	//When the user clicks on save
 	public Medication saveClicked(){
+		//Get the days of the week that the user clicked
 		String daysOfWeek = "";
 		if (sundayCheck.isSelected()) {
 			if (daysOfWeek.equals("")) daysOfWeek += "Sunday";
@@ -157,8 +169,7 @@ public class EditMedication extends Application{
 			else daysOfWeek += ", Saturday";
 		}
 		
-		System.out.println(daysOfWeek);
-		// Make the proper string for the medication and then add it to the medList
+		// Make the proper string for the medication and then return a medication object
 		String tempFullDay = daysOfWeek + " - " + hourDropDown.getValue() + ":" + minuteDropDown.getValue() + ":00";
 		return new Medication(nameField.getText(), tempFullDay, descriptionField.getText());
 	}
@@ -205,6 +216,7 @@ public class EditMedication extends Application{
 		minuteDropDown.setItems(minutes);
 	}
 	
+	//Saves the medList to a txt file
 	public void save() {
 		try {
 			PrintWriter outputStream = new PrintWriter(new FileOutputStream("medications.txt"));
@@ -214,6 +226,10 @@ public class EditMedication extends Application{
 				outputStream.println(myController.medList.get(i).getMedName());
 				outputStream.println(myController.medList.get(i).getMedDateTime());
 				outputStream.println(myController.medList.get(i).getMedInfo());
+				//Prints 'N/A' if there is no med info
+				if(myController.medList.get(i).getMedInfo().isEmpty()) {
+					outputStream.println("N/A");
+				}
 			}
 			outputStream.close();
 		} catch (FileNotFoundException e) {

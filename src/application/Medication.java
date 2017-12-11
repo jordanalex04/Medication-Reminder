@@ -27,6 +27,16 @@ public class Medication {
        public String getMedInfo() {
               return this.medInfo;
        }
+       
+       public String getHour() {
+    	   int index = this.getMedDateTime().indexOf("-");
+    	   return this.getMedDateTime().substring(index + 2, index + 4);
+       }
+       
+       public String getMinute() {
+    	   int index = this.getMedDateTime().indexOf("-");
+    	   return this.getMedDateTime().substring(index + 5, index + 7);
+       }
 
        public void setMedName(String myMedName) {
               this.medName = myMedName;
