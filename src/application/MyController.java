@@ -47,7 +47,6 @@ public class MyController implements Initializable {
 	@FXML private CheckBox sundayCheck;
 	@FXML private ChoiceBox<Object> hourDropDown;
 	@FXML private ChoiceBox<Object> minuteDropDown;
-	@FXML private ChoiceBox<String> morningAfternoonDropDown;
 	@FXML private Label timeLabel;
 	@FXML private Label upcomingMedsLabel;
 	@FXML private TextArea descriptionField;
@@ -63,10 +62,6 @@ public class MyController implements Initializable {
 		makeDropDowns();							// Creates all the drop down boxes
 		setTime();									// Sets the time, also runs continuously
 		load();										// Loads into the program all the medications found in medication.txt
-		
-		// Make the morningAfternoonDropDown box
-		ObservableList<String> amOrPm = FXCollections.observableArrayList("AM", "PM");
-		morningAfternoonDropDown.setItems(amOrPm);
 	}
 	
 	public void makeDropDowns() {
@@ -109,7 +104,11 @@ public class MyController implements Initializable {
 			Date dt = new Date();
 			String time = timeFormat.format(dt);
 			timeLabel.setText(time);
-
+			
+			if(time.substring(time.indexOf(" ") + 1).equals("00:00:01")) {
+				sort();
+			}
+			
 			// Check the time on all medications
 			String dayOfWeek = time.substring(0, time.indexOf(" "));
 			for (int i = 0; i < medList.size(); i++) {
@@ -163,10 +162,67 @@ public class MyController implements Initializable {
 		// Make the proper string for the medication and then add it to the medList
 		String tempFullDay = daysOfWeek + " - " + hourDropDown.getValue() + ":" + minuteDropDown.getValue() + ":00";
 		medList.add(new Medication(nameField.getText(), tempFullDay, descriptionField.getText()));
-		upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n" + medList.get(medList.size() - 1).toString());
-
+		//upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n\n" + medList.get(medList.size() - 1).toString());
+		sort();
 		//calls the save method to save the new medication to the txt file
 		save(tempFullDay);
+	}
+	
+	//Sorts medlist and updates the label as to what is coming up that day
+	public void sort() {
+		ArrayList<Medication> dayList = new ArrayList<Medication>();
+		upcomingMedsLabel.setText("");
+		Date dt = new Date();
+		DateFormat df = new SimpleDateFormat("EEEE");
+		String currentDay = df.format(dt);
+		
+		//Runs through all elements in the array
+		for(int i = 0; i < medList.size(); i++) {
+			//Checks to see if the medication needs to be taken today
+			if(medList.get(i).getMedDateTime().contains(currentDay)) {
+				boolean added = false;
+				//If no other element has been added, added the element
+				if(dayList.size() == 0) {
+					dayList.add(medList.get(i));
+				} else {
+					//Checks all other medications in the dayList to order them chronologicaly
+					for(int j = 0; j < dayList.size(); j++) {
+						//Get the hour of element at j and compare it again element at i of medList
+						int hour = Integer.parseInt(dayList.get(j).getHour());
+						//If < add at j, if equal check minutes else add later
+						if(Integer.parseInt(medList.get(i).getHour()) < hour) {
+							dayList.add(j, medList.get(i));
+							added = true;
+							break;
+						} else if (Integer.parseInt(medList.get(i).getHour()) == hour) {
+							added = true;
+							//Checks against minutes
+							int minute = Integer.parseInt(dayList.get(j).getMinute());
+							if(Integer.parseInt(medList.get(i).getMinute()) < minute) {
+								dayList.add(j, medList.get(i));
+								break;
+							} else {
+								if(dayList.size() > (j + 1)) {
+									dayList.add(j+1, medList.get(i));
+									break;
+								} else {
+									dayList.add(medList.get(i));
+									break;
+								}
+							}
+						}
+					}
+					if(added == false) {
+						dayList.add(medList.get(i));
+					}
+				}
+			}
+		}
+		
+		//Update the upcomingMedsLabel
+		for(int i = 0; i < dayList.size(); i++) {
+			upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n\n" + dayList.get(i));
+		}
 	}
 	
 	public void save(String tempFullDay) {
@@ -194,8 +250,13 @@ public class MyController implements Initializable {
 				outputStream.println(contents[i]);
 			}
 			
+			//If the info is empty print N/A
+			String description = descriptionField.getText();
+			if(descriptionField.getText().isEmpty()) {
+				description = "N/A";
+			}
 			//Finally add the new medication to the file
-			outputStream.print(nameField.getText() + "\n" + tempFullDay + "\n" + descriptionField.getText() + "\n");
+			outputStream.print(nameField.getText() + "\n" + tempFullDay + "\n" + description + "\n");
 			outputStream.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File Missing");
@@ -203,6 +264,7 @@ public class MyController implements Initializable {
 	}
 	
 	public void load() {
+		medList = new ArrayList<Medication>();
 		try {
 			upcomingMedsLabel.setText("");
 			//Counts how many lines there are in the file
@@ -221,7 +283,7 @@ public class MyController implements Initializable {
 				contents[i] = inputStream.nextLine();
 				if((i+1)%3 == 0) {
 					medList.add(new Medication(contents[i-2], contents[i-1], contents[i]));
-					upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n" + medList.get(medList.size() - 1).toString());
+					//upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n\n" + medList.get(medList.size() - 1).toString());
 				}
 			}
 			inputStream.close();
@@ -229,6 +291,8 @@ public class MyController implements Initializable {
 		} catch (FileNotFoundException e) {
 			System.out.println("File Missing");
 		}
+		
+		sort();
 	}
 
 	// When the user clicks on clearButton this method will be called

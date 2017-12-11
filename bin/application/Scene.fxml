@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -12,7 +13,6 @@
       <Label layoutX="475.0" layoutY="165.0" text="Time" />
       <ChoiceBox fx:id="hourDropDown" layoutX="475.0" layoutY="217.0" prefHeight="51.0" prefWidth="91.0" />
       <ChoiceBox fx:id="minuteDropDown" layoutX="587.0" layoutY="217.0" prefHeight="51.0" prefWidth="91.0" />
-      <ChoiceBox fx:id="morningAfternoonDropDown" layoutX="700.0" layoutY="217.0" prefHeight="51.0" prefWidth="91.0" />
       <CheckBox fx:id="mondayCheck" layoutX="475.0" layoutY="294.0" mnemonicParsing="false" text="Mon" />
       <CheckBox fx:id="tuesdayCheck" layoutX="587.0" layoutY="294.0" mnemonicParsing="false" text="Tu" />
       <CheckBox fx:id="sundayCheck" layoutX="587.0" layoutY="393.0" mnemonicParsing="false" text="Sun" />
@@ -24,8 +24,11 @@
       <Button fx:id="addButton" layoutX="475.0" layoutY="592.0" mnemonicParsing="false" onAction="#addButton" text="Add" />
       <Button fx:id="clearButton" layoutX="713.0" layoutY="592.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <TextArea fx:id="descriptionField" layoutX="475.0" layoutY="476.0" prefHeight="110.0" prefWidth="325.0" promptText="Insert Description Here" wrapText="true" />
-      <Label fx:id="upcomingMedsLabel" contentDisplay="TOP" layoutX="34.0" layoutY="34.0" prefHeight="604.0" prefWidth="384.0" wrapText="true" />
-      <Label fx:id="timeLabel" layoutX="6.0" layoutY="618.0" text="Label" />
+      <Label fx:id="upcomingMedsLabel" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="34.0" layoutY="117.0" prefHeight="436.0" prefWidth="384.0" wrapText="true" />
+      <Label fx:id="timeLabel" layoutX="14.0" layoutY="573.0" prefHeight="70.0" prefWidth="394.0" text="Label">
+         <font>
+            <Font size="48.0" />
+         </font></Label>
       <MenuBar fx:id="menuBar">
         <menus>
           <Menu mnemonicParsing="false" text="File">
@@ -35,5 +38,10 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Label layoutX="43.0" layoutY="65.0" prefHeight="53.0" prefWidth="384.0" text="Upcoming Medications" textAlignment="CENTER">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
