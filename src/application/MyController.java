@@ -163,9 +163,9 @@ public class MyController implements Initializable {
 		String tempFullDay = daysOfWeek + " - " + hourDropDown.getValue() + ":" + minuteDropDown.getValue() + ":00";
 		medList.add(new Medication(nameField.getText(), tempFullDay, descriptionField.getText()));
 		//upcomingMedsLabel.setText(upcomingMedsLabel.getText() + "\n\n" + medList.get(medList.size() - 1).toString());
-		sort();
 		//calls the save method to save the new medication to the txt file
 		save(tempFullDay);
+		load();
 	}
 	
 	//Sorts medlist and updates the label as to what is coming up that day
@@ -254,6 +254,7 @@ public class MyController implements Initializable {
 			String description = descriptionField.getText();
 			if(descriptionField.getText().isEmpty()) {
 				description = "N/A";
+				System.out.println("grr");
 			}
 			//Finally add the new medication to the file
 			outputStream.print(nameField.getText() + "\n" + tempFullDay + "\n" + description + "\n");
