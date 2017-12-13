@@ -1,3 +1,10 @@
+/*
+ * Alexander Jordan
+ * Quinn Furumo
+ * Medication Reminder
+ * Fall 2017 - COSC 2100
+ */
+
 package application;
 
 import javafx.scene.control.Button;
