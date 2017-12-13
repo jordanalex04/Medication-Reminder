@@ -228,7 +228,7 @@ public class EditMedication extends Application{
 				outputStream.println(myController.medList.get(i).getMedInfo());
 				//Prints 'N/A' if there is no med info
 				if(myController.medList.get(i).getMedInfo().isEmpty()) {
-					outputStream.println("N/A");
+					outputStream.print("N/A");
 				}
 			}
 			outputStream.close();
