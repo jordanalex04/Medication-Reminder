@@ -1,6 +1,12 @@
 Tylenol
-Monday, Wednesday, Thursday, Friday - 09:00:00
-Take before 3 before class
+Monday, Wednesday, Friday - 07:45:00
+Take before 8am class
+NightQuil
+Sunday, Monday, Tuesday, Wednesday, Thursday - 22:30:00
+Take at night before going to bed
+Advil
+Tuesday - 20:55:00
+N/A
 Vitamin C
-Sunday, Monday, Tuesday, Wednesday, Thursday, Saturday - 06:45:00
-Take in the morning with breakfast
+Sunday, Monday, Wednesday, Thursday, Friday, Saturday - 06:35:00
+Take 3 every morning
